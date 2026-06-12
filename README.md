@@ -2,6 +2,8 @@
 
 **An open source implementation of a transceiver (i.e. receiver and transmitter) for the Digital Television standard ISDB-T (ARIB's STD-B31) in GNU Radio.**
 
+**Note:** This repository includes recent advances regarding GPU acceleration for the transceiver blocks.
+
 **If you find the code useful, please consider starring the repository and/or citing our research paper (e.g. https://iie.fing.edu.uy/publicaciones/2020/LFAIM20/ regarding the transmitter or https://iie.fing.edu.uy/publicaciones/2016/LFGGB16/ regarding the receiver).**
 
 **IMPORTANT**: It should work for all versions of GNU Radio starting at 3.7. Switch to the corresponding branch if using either GNU Radio 3.7 or 3.8. If you're using 3.9 or above, the master branch should work fine. It's been tested in Ubuntu 22.04 and 24.04.

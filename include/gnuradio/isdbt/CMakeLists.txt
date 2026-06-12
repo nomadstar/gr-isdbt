@@ -12,6 +12,7 @@
 install(FILES
     api.h
     ofdm_synchronization.h
+    ofdm_synchronization_gpu.h
     tmcc_decoder.h
     frequency_deinterleaver.h
     time_deinterleaver.h

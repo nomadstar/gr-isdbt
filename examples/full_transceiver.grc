@@ -295,7 +295,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/gnuradio/persistent/layer_a.ts
+    file: /home/ignatus/GitHub/TransIsdtb/output/video/output_mpeg2.ts
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -317,7 +317,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/gnuradio/persistent/layer_b.ts
+    file: /home/ignatus/GitHub/TransIsdtb/output/video/output_mpeg2.ts
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1055,7 +1055,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 620]
+    coordinate: [816, 616.0]
     rotation: 180
     state: enabled
 - name: isdbt_hierarchical_combinator_0
@@ -1840,4 +1840,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.9.2
+  grc_version: 3.10.12.0

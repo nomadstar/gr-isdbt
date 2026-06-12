@@ -13,6 +13,8 @@ include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND isdbt_sources
     ofdm_synchronization_impl.cc
+    ofdm_synchronization_gpu_impl.cc
+    ofdm_synchronization_gpu_kernel.cu
     tmcc_decoder_impl.cc
     frequency_deinterleaver_impl.cc
     time_deinterleaver_impl.cc

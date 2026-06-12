@@ -31,6 +31,7 @@ void bind_frequency_deinterleaver(py::module& m);
 void bind_frequency_interleaver(py::module& m);
 void bind_hierarchical_combinator(py::module& m);
 void bind_ofdm_synchronization(py::module& m);
+void bind_ofdm_synchronization_gpu(py::module& m);
 void bind_pilot_signals(py::module& m);
 void bind_reed_solomon_dec_isdbt(py::module& m);
 void bind_subset_of_carriers(py::module& m);
@@ -77,6 +78,7 @@ PYBIND11_MODULE(isdbt_python, m)
     bind_frequency_interleaver(m);
     bind_hierarchical_combinator(m);
     bind_ofdm_synchronization(m);
+    bind_ofdm_synchronization_gpu(m);
     bind_pilot_signals(m);
     bind_reed_solomon_dec_isdbt(m);
     bind_subset_of_carriers(m);

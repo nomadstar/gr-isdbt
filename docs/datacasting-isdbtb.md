@@ -49,6 +49,12 @@ Reed-Solomon (204,188)
   -> BST-OFDM modo 3
 ```
 
+Los módulos Python de paquetización ISDB-Tb fueron desarrollados usando como
+referencia [`opencaster_isdb-tb`](https://github.com/0xalen/opencaster_isdb-tb).
+Ese repositorio sirvió como base práctica para entender la generación de
+secciones MPEG-2/MPE y su conversión a paquetes MPEG-TS aptos para ser
+multiplexados dentro del flujo ISDB-Tb.
+
 ## Encapsulación
 
 Cada unidad de datos incorpora una cabecera mínima de integridad antes de
@@ -75,6 +81,11 @@ El transmisor experimental realiza:
 5. segmentación a TS de 188 B;
 6. inserción de repeticiones del carrusel;
 7. salida hacia el transmisor SDR.
+
+La etapa de paquetización en Python encapsula los datos en una estructura
+compatible con MPEG-TS siguiendo la lógica de referencia de `opencaster_isdb-tb`,
+pero agregando secuenciamiento, verificación y soporte de carrusel para el caso
+simplex evaluado en este repositorio.
 
 El primer paquete de un flujo dispara una ráfaga `START` repetida. Los datos
 nuevos y las repeticiones convergen en un continuity counter maestro para evitar

@@ -49,6 +49,11 @@ La capa de datacasting se monta sobre esa cadena sin modificar la capa física.
 El flujo experimental usa MPEG-TS como contenedor genérico y separa servicios
 mediante PID.
 
+Los módulos Python de paquetización ISDB-Tb tomaron como referencia
+[`opencaster_isdb-tb`](https://github.com/0xalen/opencaster_isdb-tb), en
+particular el enfoque de construir secciones MPEG-2/MPE y convertirlas a
+paquetes TS para insertarlas en el flujo de transporte.
+
 ## Instalación básica
 
 Requisitos generales:
@@ -101,6 +106,8 @@ El flujo documentado en la memoria usa un transmisor y receptor SDR:
   repeticiones del carrusel.
 - `rx.py`/bloques embebidos: validan CRC-32, procesan control START/EOT,
   verifican hash, usan buffer de rescate y reordenan paquetes por secuencia.
+- módulos de paquetización Python: generan secciones compatibles con MPEG-TS a
+  partir de la referencia práctica de `opencaster_isdb-tb`.
 - `loggermaster.py`: serializa métricas a CSV en tiempo real.
 - `mastermetrics.py`, `metrics_cleaner.py`, `metrics_reporter.py` y
   `plot_per_mer.py`: consolidan, limpian, resumen y grafican resultados.

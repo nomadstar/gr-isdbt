@@ -13,8 +13,6 @@ include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND isdbt_sources
     ofdm_synchronization_impl.cc
-    ofdm_synchronization_gpu_impl.cc
-    ofdm_synchronization_gpu_kernel.cu
     tmcc_decoder_impl.cc
     frequency_deinterleaver_impl.cc
     time_deinterleaver_impl.cc
@@ -35,6 +33,22 @@ list(APPEND isdbt_sources
     subset_of_carriers_impl.cc
 )
 
+# GPU-accelerated OFDM synchronization block: compiled against whichever
+# backend was detected in the top-level CMakeLists.txt (CUDA or ROCm/HIP).
+# The block is skipped entirely if neither toolchain is available.
+if(ISDBT_GPU_BACKEND STREQUAL "CUDA")
+    list(APPEND isdbt_sources
+        ofdm_synchronization_gpu_impl.cc
+        ofdm_synchronization_gpu_kernel.cu
+    )
+elseif(ISDBT_GPU_BACKEND STREQUAL "HIP")
+    list(APPEND isdbt_sources
+        ofdm_synchronization_gpu_impl.cc
+        ofdm_synchronization_gpu_kernel_hip.cpp
+    )
+    set_source_files_properties(ofdm_synchronization_gpu_kernel_hip.cpp PROPERTIES LANGUAGE HIP)
+endif()
+
 set(isdbt_sources "${isdbt_sources}" PARENT_SCOPE)
 if(NOT isdbt_sources)
     MESSAGE(STATUS "No C++ sources... skipping lib/")
@@ -43,6 +57,9 @@ endif(NOT isdbt_sources)
 
 add_library(gnuradio-isdbt SHARED ${isdbt_sources})
 target_link_libraries(gnuradio-isdbt gnuradio::gnuradio-runtime gnuradio::gnuradio-blocks gnuradio::gnuradio-fft gnuradio::gnuradio-filter gnuradio::gnuradio-fec Volk::volk)
+if(ISDBT_GPU_BACKEND STREQUAL "HIP")
+    target_link_libraries(gnuradio-isdbt hip::host)
+endif()
 target_include_directories(gnuradio-isdbt
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>

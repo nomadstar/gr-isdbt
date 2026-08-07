@@ -36,13 +36,29 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 # Find gnuradio to get access to the cmake modules
 find_package(Gnuradio "3.10" REQUIRED COMPONENTS blocks fft filter fec volk)
 
-# Enable CUDA support
-enable_language(CUDA)
+# Enable optional GPU acceleration backend: CUDA first, ROCm/HIP as fallback.
+# ROCm support is scaffolded here but untested (no ROCm hardware/toolchain
+# available at the time of writing); it will be verified in a follow-up once
+# AMD hardware is available.
+include(CheckLanguage)
+
+check_language(CUDA)
 if(CMAKE_CUDA_COMPILER)
-    message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
+    enable_language(CUDA)
     find_package(CUDAToolkit REQUIRED)
+    set(ISDBT_GPU_BACKEND "CUDA")
+    message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}. GPU backend: CUDA")
 else()
-    message(WARNING "CUDA compiler not found. GPU acceleration will not be available.")
+    check_language(HIP)
+    if(CMAKE_HIP_COMPILER)
+        enable_language(HIP)
+        find_package(hip REQUIRED)
+        set(ISDBT_GPU_BACKEND "HIP")
+        message(STATUS "ROCm/HIP compiler found: ${CMAKE_HIP_COMPILER}. GPU backend: HIP")
+    else()
+        set(ISDBT_GPU_BACKEND "")
+        message(WARNING "Neither CUDA nor ROCm/HIP compiler found. GPU acceleration will not be available.")
+    endif()
 endif()
 
 # Set the version information here

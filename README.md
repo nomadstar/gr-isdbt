@@ -1,10 +1,13 @@
-# gr-isdbt-gpu
+# gr-isdbt (fork nomadstar — GPU/datacasting)
 
-`gr-isdbt-gpu` es un módulo out-of-tree de GNU Radio para construir y
+Este repositorio es el fork personal de [`nomadstar`](https://github.com/nomadstar)
+de [`gr-isdbt`](https://github.com/git-artes/gr-isdbt), usado como base de
+trabajo de tesis. Es un módulo out-of-tree de GNU Radio para construir y
 evaluar cadenas ISDB-T/ISDB-Tb con foco en transmisión SDR, recepción,
-sincronización OFDM y medición de desempeño. El repositorio parte del trabajo
-`gr-isdbt` y agrega bloques, ejemplos y material experimental orientado a
-datacasting sobre TDT.
+sincronización OFDM y medición de desempeño. Sobre la base de `gr-isdbt` se
+agregan bloques acelerados por GPU, ejemplos y material experimental orientado
+a datacasting sobre TDT. El repositorio original queda referenciado como
+remoto `upstream`; todo el desarrollo nuevo de este fork vive en `master`.
 
 ## Contexto
 
@@ -54,6 +57,25 @@ Los módulos Python de paquetización ISDB-Tb tomaron como referencia
 particular el enfoque de construir secciones MPEG-2/MPE y convertirlas a
 paquetes TS para insertarlas en el flujo de transporte.
 
+## Aceleración GPU (CUDA / ROCm)
+
+El bloque `ofdm_synchronization_gpu` reemplaza el interpolador FIR MMSE de
+`gr::filter` por un kernel GPU (`lib/ofdm_synchronization_gpu_kernel*`) para
+acelerar la interpolación de muestras en la sincronización OFDM. El backend se
+detecta automáticamente al configurar con CMake (`CheckLanguage`), sin
+intervención manual:
+
+- **CUDA**: backend principal, verificado — compila con `nvcc` y expone los
+  símbolos `isdbt_gpu_*` en `libgnuradio-isdbt.so`. Requiere el CUDA Toolkit
+  (`nvcc` en el `PATH`).
+- **ROCm/HIP**: backend alternativo para GPUs AMD
+  (`lib/ofdm_synchronization_gpu_kernel_hip.cpp`), con la misma interfaz
+  `extern "C"` que el kernel CUDA. El código está escrito y cableado en CMake,
+  pero **aún no se ha probado en hardware/toolchain ROCm real** — queda
+  pendiente para una sesión futura cuando haya una GPU AMD disponible.
+- Si no se detecta ni CUDA ni HIP, el bloque GPU se excluye del build
+  automáticamente y el resto del módulo compila sin cambios.
+
 ## Instalación básica
 
 Requisitos generales:
@@ -62,6 +84,8 @@ Requisitos generales:
 - CMake y compilador C++.
 - Dependencias de ISDB-T usadas por el entorno de GNU Radio.
 - USRP/UHD si se ejecutan pruebas por RF.
+- Opcional, para aceleración GPU: CUDA Toolkit o ROCm/HIP (ver sección
+  anterior).
 
 Compilación típica:
 
@@ -129,6 +153,24 @@ aproximadamente `MER >= 6.5 dB` para QPSK 3/4 y `MER >= 11.5 dB` para 16-QAM
 3/4. Estos valores son de laboratorio y no equivalen a certificación de
 cobertura en campo abierto.
 
+## Roadmap: port a C++ de la capa de datacasting
+
+El flujo de datacasting descrito arriba está hoy implementado en Python en el
+submódulo `examples/TransIsdtb` (banco experimental de tesis). El plan para
+este fork es portar a C++, dentro de `lib/`/`include/gnuradio/isdbt/` de este
+repositorio, las partes que se beneficien de mayor desempeño:
+
+1. Capa de datacasting tx/rx: encapsulación TS, secuenciamiento, verificación
+   CRC-32/XXH64 y carrusel de repeticiones.
+2. Empaquetado MPEG-TS/MPE: construcción de secciones y su conversión a
+   paquetes TS.
+3. Pipeline de métricas: cálculo de PER/MER/SNR/Goodput/Drops.
+
+**`examples/TransIsdtb` se usa únicamente como referencia de lectura y no se
+modifica** — es el trabajo de tesis de otra persona y sirvió de inspiración
+para este proyecto. Cualquier mejora a esa lógica se implementa de forma
+independiente en este repositorio, nunca escribiendo sobre el submódulo.
+
 ## Limitaciones
 
 - Validación principalmente de laboratorio interior.
@@ -142,3 +184,7 @@ El manifiesto original describe `gr-isdbt` como un transceptor completo para
 ISDB-T desarrollado por Federico La Rocca, Pablo Belzarena, Gabriel Gomez Sena,
 Pablo Flores Guridi y Victor Gonzalez Barbone. Ver `MANIFEST.md`, `LICENSE` y
 `COPYING` para detalles del origen y licenciamiento.
+
+Este fork (`nomadstar/gr-isdbt`) mantiene esa licencia y agrega, por encima de
+la base original, los bloques GPU y el trabajo de datacasting descritos en
+este documento.

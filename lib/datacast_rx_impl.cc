@@ -10,6 +10,7 @@
 #include "datacast_rx_impl.h"
 #include <gnuradio/io_signature.h>
 #include <gnuradio/isdbt/datacast_format.h>
+#include <gnuradio/isdbt/metrics_board.h>
 
 #include <algorithm>
 #include <cstring>
@@ -536,6 +537,7 @@ int datacast_rx_impl::general_work(int noutput_items,
                         ? static_cast<float>(d_error_packets) /
                               static_cast<float>(d_total_seen_packets)
                         : 0.0f;
+        datacast::metrics_board::instance().set_per(per);
         float status[4] = { per, static_cast<float>(d_reorder_buffer.size()),
                              static_cast<float>(d_rescue_buffer.size()), d_last_output_ip_len };
         for (int p = 1; p <= 4; p++) {

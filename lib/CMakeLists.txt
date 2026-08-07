@@ -33,6 +33,9 @@ list(APPEND isdbt_sources
     subset_of_carriers_impl.cc
     datacast_tx_impl.cc
     datacast_rx_impl.cc
+    rms_monitor_impl.cc
+    mer_snr_estimator_impl.cc
+    metrics_logger_impl.cc
 )
 
 # GPU-accelerated OFDM synchronization block: compiled against whichever

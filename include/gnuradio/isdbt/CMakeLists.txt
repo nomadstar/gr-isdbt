@@ -34,5 +34,9 @@ install(FILES
     datacast_format.h
     datacast_tx.h
     datacast_rx.h
+    metrics_board.h
+    rms_monitor.h
+    mer_snr_estimator.h
+    metrics_logger.h
     DESTINATION include/gnuradio/isdbt
 )

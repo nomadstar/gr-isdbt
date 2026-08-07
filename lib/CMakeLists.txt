@@ -31,6 +31,8 @@ list(APPEND isdbt_sources
     byte_interleaver_impl.cc
     energy_dispersal_impl.cc
     subset_of_carriers_impl.cc
+    datacast_tx_impl.cc
+    datacast_rx_impl.cc
 )
 
 # GPU-accelerated OFDM synchronization block: compiled against whichever
@@ -57,6 +59,17 @@ endif(NOT isdbt_sources)
 
 add_library(gnuradio-isdbt SHARED ${isdbt_sources})
 target_link_libraries(gnuradio-isdbt gnuradio::gnuradio-runtime gnuradio::gnuradio-blocks gnuradio::gnuradio-fft gnuradio::gnuradio-filter gnuradio::gnuradio-fec Volk::volk)
+
+# xxHash64 for the datacasting layer (datacast_tx/datacast_rx): must match
+# the algorithm used by the Python reference (xxhash.xxh64) bit-for-bit.
+find_library(XXHASH_LIBRARY NAMES xxhash)
+find_path(XXHASH_INCLUDE_DIR NAMES xxhash.h)
+if(XXHASH_LIBRARY AND XXHASH_INCLUDE_DIR)
+    target_include_directories(gnuradio-isdbt PRIVATE ${XXHASH_INCLUDE_DIR})
+    target_link_libraries(gnuradio-isdbt ${XXHASH_LIBRARY})
+else()
+    message(FATAL_ERROR "libxxhash (xxhash.h) not found; required by datacast_tx/datacast_rx")
+endif()
 if(ISDBT_GPU_BACKEND STREQUAL "HIP")
     target_link_libraries(gnuradio-isdbt hip::host)
 endif()

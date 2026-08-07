@@ -31,5 +31,8 @@ install(FILES
     byte_interleaver.h
     energy_dispersal.h
     subset_of_carriers.h
+    datacast_format.h
+    datacast_tx.h
+    datacast_rx.h
     DESTINATION include/gnuradio/isdbt
 )

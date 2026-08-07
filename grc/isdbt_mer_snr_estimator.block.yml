@@ -1,0 +1,21 @@
+id: isdbt_mer_snr_estimator
+label: MER/SNR Estimator
+category: '[isdbt]/datacasting'
+
+templates:
+  imports: import gnuradio.isdbt as isdbt
+  make: isdbt.mer_snr_estimator(${constellation})
+
+parameters:
+-   id: constellation
+    label: Constellation
+    dtype: enum
+    default: '"16QAM"'
+    options: ['"QPSK"', '"16QAM"', '"64QAM"', '"AUTO"']
+    option_labels: [QPSK, 16-QAM, 64-QAM, Auto-detect]
+
+inputs:
+-   domain: stream
+    dtype: complex
+
+file_format: 1

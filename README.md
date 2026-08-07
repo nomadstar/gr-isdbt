@@ -153,18 +153,24 @@ aproximadamente `MER >= 6.5 dB` para QPSK 3/4 y `MER >= 11.5 dB` para 16-QAM
 3/4. Estos valores son de laboratorio y no equivalen a certificación de
 cobertura en campo abierto.
 
-## Roadmap: port a C++ de la capa de datacasting
+## Capa de datacasting en C++
 
-El flujo de datacasting descrito arriba está hoy implementado en Python en el
-submódulo `examples/TransIsdtb` (banco experimental de tesis). El plan para
-este fork es portar a C++, dentro de `lib/`/`include/gnuradio/isdbt/` de este
-repositorio, las partes que se beneficien de mayor desempeño:
+El flujo de datacasting descrito arriba estaba originalmente implementado en
+Python en el submódulo `examples/TransIsdtb` (banco experimental de tesis).
+Ese diseño se portó a C++ dentro de `lib/`/`include/gnuradio/isdbt/` de este
+repositorio, manteniendo compatibilidad de bit con el formato original:
 
-1. Capa de datacasting tx/rx: encapsulación TS, secuenciamiento, verificación
-   CRC-32/XXH64 y carrusel de repeticiones.
-2. Empaquetado MPEG-TS/MPE: construcción de secciones y su conversión a
-   paquetes TS.
-3. Pipeline de métricas: cálculo de PER/MER/SNR/Goodput/Drops.
+- **`datacast_tx` / `datacast_rx`**: encapsulación MPE sobre TS,
+  secuenciamiento, verificación CRC-32/XXH64, carrusel adaptativo de
+  repeticiones, reordenamiento y buffer de rescate en el receptor. El
+  esquema de construcción de secciones MPEG-2/MPE y su segmentación a
+  paquetes TS toma como referencia el enfoque de
+  [`opencaster_isdb-tb`](https://github.com/0xalen/opencaster_isdb-tb)
+  (`ip2sec`/`sec2ts`), igual que hacía el prototipo Python original.
+- **`rms_monitor` / `mer_snr_estimator` / `metrics_logger`**: pipeline de
+  métricas (RMS, MER/SNR por de-rotación de fase ciega contra constelación
+  ideal, PER), publicadas a una pizarra compartida (`metrics_board`) y
+  consolidadas a CSV/consola.
 
 **`examples/TransIsdtb` se usa únicamente como referencia de lectura y no se
 modifica** — es el trabajo de tesis de otra persona y sirvió de inspiración

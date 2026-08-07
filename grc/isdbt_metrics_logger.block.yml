@@ -1,0 +1,24 @@
+id: isdbt_metrics_logger
+label: Metrics Logger
+category: '[isdbt]/datacasting'
+
+templates:
+  imports: import gnuradio.isdbt as isdbt
+  make: isdbt.metrics_logger(${filename}, ${print_interval})
+
+parameters:
+-   id: filename
+    label: CSV Output File
+    dtype: string
+    default: resultados_isdbt.csv
+-   id: print_interval
+    label: Print Interval (s)
+    dtype: float
+    default: '1.0'
+
+inputs:
+-   label: clock
+    domain: stream
+    dtype: float
+
+file_format: 1

@@ -1,0 +1,54 @@
+id: isdbt_datacast_rx
+label: Datacast RX
+category: '[isdbt]/datacasting'
+
+templates:
+  imports: import gnuradio.isdbt as isdbt
+  make: isdbt.datacast_rx(${target_pid}, ${port_detection_window}, ${reorder_window},
+    ${output_interface})
+
+parameters:
+-   id: target_pid
+    label: Target PID
+    dtype: int
+    default: '0x0100'
+-   id: port_detection_window
+    label: UDP Port Detection Window
+    dtype: int
+    default: '20'
+-   id: reorder_window
+    label: Reorder Window (seq span)
+    dtype: int
+    default: '50000'
+-   id: output_interface
+    label: Output TUN Interface (optional)
+    dtype: string
+    default: ''
+
+inputs:
+-   label: ts
+    domain: stream
+    dtype: byte
+
+outputs:
+-   label: payload
+    domain: stream
+    dtype: byte
+-   label: per
+    domain: stream
+    dtype: float
+    optional: true
+-   label: reorder len
+    domain: stream
+    dtype: float
+    optional: true
+-   label: rescue len
+    domain: stream
+    dtype: float
+    optional: true
+-   label: last ip len
+    domain: stream
+    dtype: float
+    optional: true
+
+file_format: 1

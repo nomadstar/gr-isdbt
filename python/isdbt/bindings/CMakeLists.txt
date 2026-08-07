@@ -40,6 +40,11 @@ list(APPEND isdbt_python_files
     hierarchical_combinator_python.cc
     ofdm_synchronization_python.cc
     ofdm_synchronization_gpu_python.cc
+    datacast_tx_python.cc
+    datacast_rx_python.cc
+    rms_monitor_python.cc
+    mer_snr_estimator_python.cc
+    metrics_logger_python.cc
     pilot_signals_python.cc
     reed_solomon_dec_isdbt_python.cc
     subset_of_carriers_python.cc

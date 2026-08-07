@@ -1,0 +1,13 @@
+id: isdbt_rms_monitor
+label: RMS Monitor
+category: '[isdbt]/datacasting'
+
+templates:
+  imports: import gnuradio.isdbt as isdbt
+  make: isdbt.rms_monitor()
+
+inputs:
+-   domain: stream
+    dtype: float
+
+file_format: 1

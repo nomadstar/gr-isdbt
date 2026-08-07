@@ -1,0 +1,56 @@
+id: isdbt_datacast_tx
+label: Datacast TX
+category: '[isdbt]/datacasting'
+
+templates:
+  imports: import gnuradio.isdbt as isdbt
+  make: isdbt.datacast_tx(${interface}, ${modulation}, ${fec}, ${private_pid},
+    ${dst_mac}, ${heartbeat_interval}, ${queue_limit}, ${carousel_repeats})
+
+parameters:
+-   id: interface
+    label: TUN Interface
+    dtype: string
+    default: tun0
+-   id: modulation
+    label: Modulation (MTU hint)
+    dtype: enum
+    default: '"16QAM"'
+    options: ['"QPSK"', '"16QAM"', '"64QAM"']
+    option_labels: [QPSK, 16-QAM, 64-QAM]
+-   id: fec
+    label: Code Rate (MTU hint)
+    dtype: enum
+    default: '"2/3"'
+    options: ['"1/2"', '"2/3"', '"3/4"', '"5/6"', '"7/8"']
+-   id: private_pid
+    label: Private PID
+    dtype: int
+    default: '0x0100'
+-   id: dst_mac
+    label: MPE Header Filler MAC
+    dtype: string
+    default: 'FF:FF:FF:FF:FF:FF'
+-   id: heartbeat_interval
+    label: Heartbeat Interval (s)
+    dtype: float
+    default: '0.1'
+-   id: queue_limit
+    label: Queue Limit (packets)
+    dtype: int
+    default: '5000'
+-   id: carousel_repeats
+    label: Carousel Repeats
+    dtype: int
+    default: '3'
+
+outputs:
+-   label: ts
+    domain: stream
+    dtype: byte
+-   label: queue depth
+    domain: stream
+    dtype: float
+    optional: true
+
+file_format: 1

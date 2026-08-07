@@ -12,6 +12,28 @@ example repository mounted as a Git submodule.
 - `obtaining_parameters.grc`: helper flowgraph for parameter inspection.
 - `viewing_the_constellation.grc`: constellation visualization example.
 
+## Datacasting (C++ blocks)
+
+Ports of the TransIsdtb Python datacasting flowgraphs to the C++ blocks in
+this repository (`isdbt.datacast_tx`, `isdbt.datacast_rx`, `isdbt.rms_monitor`,
+`isdbt.mer_snr_estimator`, `isdbt.metrics_logger`). Requires the module to be
+built and installed (`cmake --install build`).
+
+- `datacast_tx_demo.grc`: adapted from `tx_demo.grc`, replacing the static
+  `layer_a.ts` file source with `isdbt.datacast_tx` (TUN capture -> MPE
+  encapsulation -> ISDB-Tb Layer A). Compiles with `grcc`.
+- `datacast_rx_demo.grc`: adapted from `rx_demo.grc`, replacing the
+  placeholder embedded-Python block with `isdbt.datacast_rx`, writing the
+  recovered UDP payload to `/tmp/datacast_payload.bin`. Compiles with `grcc`.
+- `datacast_loopback_demo.py`: minimal end-to-end test connecting
+  `datacast_tx` directly to `datacast_rx` (no ISDB-Tb PHY, no RF) over TUN
+  interfaces `tun0`/`tun1`. Requires root. Validates the C++ port of the
+  encapsulation/carousel/reorder/rescue logic without SDR hardware.
+- `metrics_demo.py`: synthetic noisy-QPSK source feeding
+  `rms_monitor`/`mer_snr_estimator`/`metrics_logger`, to see the metrics
+  pipeline's console/CSV output without a real receiver. Runs with no
+  special privileges.
+
 ## Datacasting submodule
 
 `TransIsdtb` is included as `examples/TransIsdtb` and contains experimental

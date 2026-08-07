@@ -36,6 +36,15 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 # Find gnuradio to get access to the cmake modules
 find_package(Gnuradio "3.10" REQUIRED COMPONENTS blocks fft filter fec volk)
 
+# Enable CUDA support
+enable_language(CUDA)
+if(CMAKE_CUDA_COMPILER)
+    message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
+    find_package(CUDAToolkit REQUIRED)
+else()
+    message(WARNING "CUDA compiler not found. GPU acceleration will not be available.")
+endif()
+
 # Set the version information here
 set(VERSION_MAJOR 1)
 set(VERSION_API   0)

@@ -1,0 +1,6 @@
+[submodule "examples/TransIsdtb"]
+	path = examples/TransIsdtb
+	url = /home/ignatus/GitHub/TransIsdtb
+[submodule "examples/TransIsdt"]
+	path = examples/TransIsdt
+	url = /home/ignatus/GitHub/TransIsdtb

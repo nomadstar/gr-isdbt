@@ -1,4 +1,28 @@
-It is considered good practice to add examples in here to demonstrate the
-functionality of your OOT module. Python scripts, GRC flow graphs or other
-code can go here.
+Examples for `gr-isdbt-gpu` live in this directory. They include GNU Radio
+Companion flowgraphs, generated Python scripts and an external datacasting
+example repository mounted as a Git submodule.
 
+## Local examples
+
+- `tx_demo.grc` / `tx_demo.py`: basic ISDB-T transmitter demo.
+- `rx_demo.grc` / `rx_demo.py`: basic ISDB-T receiver demo.
+- `full_transceiver.grc` / `full_transceiver_isdbt.py`: combined transceiver
+  flowgraph.
+- `tx_demo_13seg.grc`: 13-segment transmission demo.
+- `obtaining_parameters.grc`: helper flowgraph for parameter inspection.
+- `viewing_the_constellation.grc`: constellation visualization example.
+
+## Datacasting submodule
+
+`TransIsdtb` is included as `examples/TransIsdtb` and contains experimental
+datacasting material: SDR flowgraphs, embedded Python blocks, packet recovery
+scripts, metric consolidation and plotting utilities.
+
+Initialize it after cloning with:
+
+```bash
+git submodule update --init --recursive
+```
+
+See `../docs/datacasting-isdbtb.md` for the architecture and experimental
+methodology.

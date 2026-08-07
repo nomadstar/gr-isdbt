@@ -39,6 +39,7 @@ list(APPEND isdbt_python_files
     frequency_interleaver_python.cc
     hierarchical_combinator_python.cc
     ofdm_synchronization_python.cc
+    ofdm_synchronization_gpu_python.cc
     pilot_signals_python.cc
     reed_solomon_dec_isdbt_python.cc
     subset_of_carriers_python.cc
